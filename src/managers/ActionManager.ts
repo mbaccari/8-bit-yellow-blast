@@ -4,6 +4,7 @@ import { User, UserData } from "../structures/User";
 export interface MoveData {
     name: string;
     rating: number;
+    obj: object;
     type: MoveType;
 }
 
@@ -28,7 +29,7 @@ export class ActionManager {
 	 */
     private _updateMoves(moves: MoveData[]): Move[] {
         return moves.map(move => {
-            return new Move(move.name, move.rating, move.type)
+            return new Move(move.name, move.rating, move.obj, move.type)
         })
     }
     /**
@@ -48,7 +49,7 @@ export class ActionManager {
      */
     public blast(user: User) { // <-- TODO: This could be upgraded to provide better stat manipulation  
         if (this.targetMove) {
-            const {name, rating, type} = this.targetMove
+            const {name, rating, obj, type} = this.targetMove
             switch (this.targetMove.type) {
                 case MoveType.Heals:
                     user.currentHealth += rating
@@ -63,6 +64,10 @@ export class ActionManager {
                     user.currentHealth = rating
                     return this;
                 
+                case MoveType.Skills:
+                    user.stats = obj
+                    return this
+
                 default:
                     throw Error("Invalid MoveType")
                     break;

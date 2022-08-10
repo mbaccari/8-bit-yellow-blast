@@ -65,4 +65,11 @@ export class User {
             }
         }
     }
+
+    public get stats(): object {
+        return this.data.stats
+    }
+    public set stats(update: object) {
+        this.data.stats = update
+    }
 }
